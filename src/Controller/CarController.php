@@ -2,16 +2,23 @@
 
 namespace App\Controller;
 
+use Doctrine\ORM\EntityManagerInterface;
+use App\Entity\Car;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
-use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
 
 class CarController extends AbstractController
 {
-    #[Route('/message/{msg}', name: 'message_response')]
-    public function message(string $msg): Response
+    // private CarRepository $car_repository;
+    // public function __construct(CarRepository $repository)
+    // {
+    //     $this->car_repository = $repository;
+    // }
+
+    #[Route('/cars', name: 'app_car')]
+    public function index(EntityManagerInterface $entityManager): JsonResponse
     {
-        return new JsonResponse(['Message' => $msg, 'Status' => 200]);
+        return $this->json($entityManager->getRepository(Car::class)->findAll());
     }
 }
